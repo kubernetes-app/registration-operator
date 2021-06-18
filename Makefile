@@ -118,7 +118,7 @@ deploy-spoke-operator: ensure-kustomize
 	$(KUSTOMIZE) build deploy/klusterlet/config | $(KUBECTL) apply -f -
 
 apply-spoke-cr: bootstrap-secret
-	$(KUSTOMIZE) build deploy/klusterlet/config/samples | $(SED_CMD) -e "s,quay.io/open-cluster-management/registration,$(REGISTRATION_IMAGE)," -e "s,quay.io/open-cluster-management/work,$(WORK_IMAGE)," | $(KUBECTL) apply -f -
+	$(KUSTOMIZE) build deploy/klusterlet/config/samples | $(SED_CMD) -e "s,quay.io/open-cluster-management/registration,$(REGISTRATION_IMAGE)," -e "s,quay.io/open-cluster-management/work,$(WORK_IMAGE)," -e "s,clusterName:.*,clusterName: $(MANAGED_CLUSTER)," | $(KUBECTL) apply -f -
 
 clean-hub-cr:
 	$(KUBECTL) delete -k deploy/cluster-manager/config/samples --ignore-not-found
